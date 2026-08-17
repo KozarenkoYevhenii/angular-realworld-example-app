@@ -1,16 +1,14 @@
-# AGENTS.md
+# Cursor Cloud specific instructions
 
-## Cursor Cloud specific instructions
-
-This is the **Angular RealWorld ("Conduit")** frontend. It is a client-only Angular 21 app;
-there is **no local backend** — all API calls are proxied to the hosted API
-`https://api.realworld.show/api` (see `src/app/core/interceptors/api.interceptor.ts`).
+This is the **React RealWorld ("Conduit")** frontend. It is a client-only React app
+(hooks + Redux Toolkit + React Router); there is **no local backend** — all API calls
+go to the hosted API `https://api.realworld.show/api` (see `src/core/api/client.ts`).
 Network egress to that host is required for the app and e2e tests to work.
 
 Package manager is **Bun** (installed at `~/.bun/bin/bun`, added to `~/.bashrc`). Standard
 commands live in `package.json` and `CLAUDE.md`; use those. Key ones:
 
-- Dev server: `bun run start` → http://localhost:4200 (Angular is **zoneless**).
+- Dev server: `bun run start` → http://localhost:4200 (Vite).
 - Build: `bun run build`.
 - Lint / formatting: `bun run format:check` (this is the only "lint" — CI uses it).
 - E2E tests: `bun run test:e2e` (Playwright). Tests live in the `realworld` git submodule
@@ -25,11 +23,6 @@ commands live in `package.json` and `CLAUDE.md`; use those. Key ones:
 - **E2E flakiness:** e2e tests hit the shared live API `api.realworld.show`, so a small number
   of tests can be flaky / fail due to shared state or timing (e.g. favorite/profile tests).
   Playwright retries handle most; treat isolated failures there as environment-independent.
-- **Unit tests (`bun run test`, Vitest) are pre-existing broken** and are NOT part of CI
-  (CI only runs format-check + Playwright). Two problems in the repo's test code: `zone.js`
-  is imported by the specs/`src/test-setup.ts` but is not declared in `package.json`, and each
-  spec re-calls `getTestBed().initTestEnvironment()` which conflicts with the global setup file
-  ("Cannot set base providers because it has already been called"). Do not treat these failures
-  as an environment problem.
 - **E2E debug hook:** e2e tests use `window.__conduit_debug__` to read app state
-  (see `e2e/helpers/debug.ts`).
+  (see `realworld/specs/e2e/helpers/debug.ts`).
+- **Angular → React mapping:** see `MIGRATION.md`.

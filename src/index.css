@@ -1,0 +1,13 @@
+@import '../realworld/assets/theme/styles.css';
+
+.nav-link {
+  cursor: pointer;
+}
+
+.tag-pill {
+  cursor: pointer;
+}
+
+.page-link {
+  cursor: pointer;
+}
